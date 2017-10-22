@@ -35,11 +35,17 @@ class ABC(object):
         self.initialize()
         pp.pprint(self.food_sources)
 
+        for nrun in range(1, self.nruns+1):
+            self.employed_bees_stage()
+
+
     def initialize(self):
         self.food_sources = [self.create_foodsource() for i in range(self.employed_bees)]
 
     def employed_bees_stage(self):
-        pass
+        for i in range(self.employed_bees):
+            new_solution = self.generate_solution(i)
+            print('NUEVA', new_solution)
 
     def onlooker_bees_stage(self):
         pass
@@ -47,11 +53,25 @@ class ABC(object):
     def scout_bees_stage(self):
         pass
 
-    def generate_solution(self, current_solution):
-        pass
+    def generate_solution(self, current_solution_index):
+        solution = self.food_sources[current_solution_index].solution
+        k_source_index = self.random_solution_excluding([current_solution_index])
+        k_solution = self.food_sources[k_source_index].solution
+        d = rand.randint(0, len(self.fn_lb) - 1)
+        r = rand.uniform(-1, 1)
+
+        new_solution = solution
+        new_solution[d] = solution[d] + r * (solution[d] - k_solution[d])
+
+        return new_solution
 
     def random_solution_excluding(self, excluded_index):
-        pass
+        available_indexes = set(range(self.employed_bees))
+        exclude_set = set(excluded_index)
+        diff = available_indexes - exclude_set
+        selected = rand.choice(list(diff))
+
+        return selected
 
     def best_solution(self, new_solution, parent_solution):
         pass
