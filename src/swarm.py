@@ -1,5 +1,7 @@
-from food_sources import FoodSource
+from food_source import FoodSource
+import numpy as np
 import pprint as pp
+import random as rand
 
 
 class ABC(object):
@@ -23,15 +25,15 @@ class ABC(object):
         self.nruns = nruns
         self.fn_eval = fn_eval
         self.trials_limit = trials_limit
-        self.fn_lb = fn_lb
-        self.fn_ub = fn_ub
+        self.fn_lb = np.array(fn_lb)
+        self.fn_ub = np.array(fn_ub)
 
         self.employed_bees = round(npopulation * employed_bees_percentage)
         self.onlooker_bees = npopulation - self.employed_bees
 
     def optimize(self):
         self.initialize()
-        pp.pprin(self.food_sources)
+        pp.pprint(self.food_sources)
 
     def initialize(self):
         self.food_sources = [self.create_foodsource() for i in range(self.employed_bees)]
@@ -72,7 +74,7 @@ class ABC(object):
 
     def create_foodsource(self):
         solution = self.candidate_solution(self.fn_lb, self.fn_ub)
-        fitness self.fitness(solution)
+        fitness = self.fitness(solution)
 
         return FoodSource(solution, fitness)
 
