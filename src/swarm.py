@@ -60,7 +60,7 @@ class ABC(object):
         d = rand.randint(0, len(self.fn_lb) - 1)
         r = rand.uniform(-1, 1)
 
-        new_solution = solution
+        new_solution = np.copy(solution)
         new_solution[d] = solution[d] + r * (solution[d] - k_solution[d])
 
         return new_solution
