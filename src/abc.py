@@ -1,10 +1,14 @@
+from food_sources import FoodSource
+import pprint as pp
+
 
 class ABC(object):
-    """docstring for Colony"""
+    """docstring for ABC"""
 
     food_sources = []
-    
-    def __init__(self,
+
+    def __init__(
+        self,
         npopulation,
         nruns,
         fn_eval,
@@ -14,7 +18,7 @@ class ABC(object):
         fn_lb=[-5, -5],
         fn_ub=[5, 5],
     ):
-        super(Colony, self).__init__()
+        super(ABC, self).__init__()
         self.npopulation = npopulation
         self.nruns = nruns
         self.fn_eval = fn_eval
@@ -22,14 +26,15 @@ class ABC(object):
         self.fn_lb = fn_lb
         self.fn_ub = fn_ub
 
-        self.employed_bees = 0
-        self.onlooker_bees = 0
+        self.employed_bees = round(npopulation * employed_bees_percentage)
+        self.onlooker_bees = npopulation - self.employed_bees
 
     def optimize(self):
-        pass
+        self.initialize()
+        pp.pprin(self.food_sources)
 
     def initialize(self):
-        pass
+        self.food_sources = [self.create_foodsource() for i in range(self.employed_bees)]
 
     def employed_bees_stage(self):
         pass
@@ -53,10 +58,26 @@ class ABC(object):
         pass
 
     def fitness(self, solution):
-        pass
+        result = self.fn_eval(solution)
+
+        if result >= 0:
+            fitness = 1 / (1 + result)
+        else:
+            fitness = abs(result)
+
+        return fitness
 
     def selection(self, solutions, weights):
         pass
 
+    def create_foodsource(self):
+        solution = self.candidate_solution(self.fn_lb, self.fn_ub)
+        fitness self.fitness(solution)
+
+        return FoodSource(solution, fitness)
+
     def candidate_solution(self, lb, ub):
-        pass
+        r = rand.random()
+        solution = lb + (ub - lb) * r
+
+        return solution

@@ -7,3 +7,6 @@ class FoodSource(object):
 
         self.solution = initial_solution
         self.fitness = initial_fitness
+
+    def __repr__(self):
+        return f'<FoodSource s:{self.solution} f:{self.fitness} />'
