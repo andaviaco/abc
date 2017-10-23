@@ -44,7 +44,9 @@ class ABC(object):
 
         pp.pprint(self.food_sources)
 
-        return self.best_source()
+        best_fs = self.best_source()
+
+        return best_fs.solution
 
 
     def initialize(self):
