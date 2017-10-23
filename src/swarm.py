@@ -86,7 +86,7 @@ class ABC(object):
         new_solution = np.copy(solution)
         new_solution[d] = solution[d] + r * (solution[d] - k_solution[d])
 
-        return new_solution
+        return np.around(new_solution, decimals=4)
 
     def random_solution_excluding(self, excluded_index):
         available_indexes = set(range(self.employed_bees))
@@ -143,4 +143,4 @@ class ABC(object):
         r = rand.random()
         solution = lb + (ub - lb) * r
 
-        return solution
+        return np.around(solution, decimals=4)
