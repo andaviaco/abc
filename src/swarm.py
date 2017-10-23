@@ -37,6 +37,7 @@ class ABC(object):
 
         for nrun in range(1, self.nruns+1):
             self.employed_bees_stage()
+            self.onlooker_bees_stage()
 
         pp.pprint(self.food_sources)
 
@@ -49,14 +50,17 @@ class ABC(object):
             new_solution = self.generate_solution(i)
             best_solution = self.best_solution(food_source.solution, new_solution)
 
-            if np.array_equal(best_solution, food_source.solution):
-                food_source.trials += 1
-            else:
-                food_source.solution = best_solution
-                food_source.trials = 0
+            self.set_solution(food_source, best_solution)
 
     def onlooker_bees_stage(self):
-        pass
+        for i in range(self.onlooker_bees):
+            fitness_all = [fs.fitness for fs in self.food_sources]
+            selected_index = self.selection(range(len(self.food_sources)), fitness_all)
+            selected_source = self.food_sources[selected_index]
+            new_solution = self.generate_solution(selected_index)
+            best_solution = self.best_solution(selected_source.solution, new_solution)
+
+            self.set_solution(selected_source, best_solution)
 
     def scout_bees_stage(self):
         pass
@@ -101,7 +105,14 @@ class ABC(object):
         return fitness
 
     def selection(self, solutions, weights):
-        pass
+        return rand.choices(solutions, weights)[0]
+
+    def set_solution(self, food_source, new_solution):
+        if np.array_equal(new_solution, food_source.solution):
+            food_source.trials += 1
+        else:
+            food_source.solution = new_solution
+            food_source.trials = 0
 
     def create_foodsource(self):
         solution = self.candidate_solution(self.fn_lb, self.fn_ub)
