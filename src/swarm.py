@@ -1,7 +1,9 @@
-from food_source import FoodSource
 import numpy as np
 import pprint as pp
 import random as rand
+from operator import attrgetter
+
+from food_source import FoodSource
 
 
 class ABC(object):
@@ -41,6 +43,9 @@ class ABC(object):
             self.scout_bees_stage()
 
         pp.pprint(self.food_sources)
+
+        return self.best_source()
+
 
     def initialize(self):
         self.food_sources = [self.create_foodsource() for i in range(self.employed_bees)]
@@ -122,6 +127,11 @@ class ABC(object):
         else:
             food_source.solution = new_solution
             food_source.trials = 0
+
+    def best_source(self):
+        best = max(self.food_sources, key=attrgetter('fitness'))
+
+        return best
 
     def create_foodsource(self):
         solution = self.candidate_solution(self.fn_lb, self.fn_ub)
