@@ -55,8 +55,8 @@ class ABC(object):
 
     def onlooker_bees_stage(self):
         for i in range(self.onlooker_bees):
-            fitness_all = [fs.fitness for fs in self.food_sources]
-            selected_index = self.selection(range(len(self.food_sources)), fitness_all)
+            probabilities = [self.probability(fs) for fs in self.food_sources]
+            selected_index = self.selection(range(len(self.food_sources)), probabilities)
             selected_source = self.food_sources[selected_index]
             new_solution = self.generate_solution(selected_index)
             best_solution = self.best_solution(selected_source.solution, new_solution)
@@ -98,7 +98,10 @@ class ABC(object):
             return current_solution
 
     def probability(self, solution_fitness):
-        pass
+        fitness_sum = sum([fs.fitness for fs in self.food_sources])
+        probability = solution_fitness.fitness / fitness_sum
+
+        return probability
 
     def fitness(self, solution):
         result = self.fn_eval(solution)
