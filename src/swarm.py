@@ -38,6 +38,7 @@ class ABC(object):
         for nrun in range(1, self.nruns+1):
             self.employed_bees_stage()
             self.onlooker_bees_stage()
+            self.scout_bees_stage()
 
         pp.pprint(self.food_sources)
 
@@ -63,7 +64,12 @@ class ABC(object):
             self.set_solution(selected_source, best_solution)
 
     def scout_bees_stage(self):
-        pass
+        for i in range(self.employed_bees):
+            food_source = self.food_sources[i]
+
+            if food_source.trials > self.trials_limit:
+                food_source = self.create_foodsource()
+
 
     def generate_solution(self, current_solution_index):
         solution = self.food_sources[current_solution_index].solution
